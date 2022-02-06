@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.coooldoggy.tabling.databinding.FragmentFavoriteBinding
+import com.coooldoggy.tabling.ui.changeTabsFont
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class FavoriteFragment: Fragment() {
@@ -32,7 +34,23 @@ class FavoriteFragment: Fragment() {
         favoriteTabAdapter = FavoriteTabAdapter(this)
         with(binding){
             if (this == null) return@with
-            vpTab.adapter = favoriteTabAdapter
+            vpTab.apply {
+                adapter = favoriteTabAdapter
+                isUserInputEnabled = false
+            }
+            tbMy.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.position?.let {
+                        tbMy.changeTabsFont(it)
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
+            })
             TabLayoutMediator(tbMy, vpTab){ tab, position ->
                 tab.text = tabTitle[position]
             }.attach()
